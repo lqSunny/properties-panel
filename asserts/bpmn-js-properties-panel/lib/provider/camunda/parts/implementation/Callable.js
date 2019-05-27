@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var cmdHelper = require('../../../../helper/CmdHelper'),
     entryFactory = require('../../../../factory/EntryFactory'),
     elementHelper = require('../../../../helper/ElementHelper'),
@@ -16,25 +17,25 @@ var forEach = require('lodash/forEach');
 var attributeInfo = {
   bpmn: {
     element: 'calledElement',
-    binding: 'camunda:calledElementBinding',
-    version: 'camunda:calledElementVersion',
-    versionTag: 'camunda:calledElementVersionTag',
-    tenantId: 'camunda:calledElementTenantId'
+    binding: `${__namespace}:calledElementBinding`,
+    version: `${__namespace}:calledElementVersion`,
+    versionTag: `${__namespace}:calledElementVersionTag`,
+    tenantId: `${__namespace}:calledElementTenantId`
   },
 
   cmmn: {
-    element: 'camunda:caseRef',
-    binding: 'camunda:caseBinding',
-    version: 'camunda:caseVersion',
-    tenantId: 'camunda:caseTenantId'
+    element: `${__namespace}:caseRef`,
+    binding: `${__namespace}:caseBinding`,
+    version: `${__namespace}:caseVersion`,
+    tenantId: `${__namespace}:caseTenantId`
   },
 
   dmn: {
-    element: 'camunda:decisionRef',
-    binding: 'camunda:decisionRefBinding',
-    version: 'camunda:decisionRefVersion',
-    versionTag: 'camunda:decisionRefVersionTag',
-    tenantId: 'camunda:decisionRefTenantId'
+    element: `${__namespace}:decisionRef`,
+    binding: `${__namespace}:decisionRefBinding`,
+    version: `${__namespace}:decisionRefVersion`,
+    versionTag: `${__namespace}:decisionRefVersionTag`,
+    tenantId: `${__namespace}:decisionRefTenantId`
   }
 };
 
@@ -72,7 +73,7 @@ function getCamundaInWithBusinessKey(element) {
   var camundaIn = [],
       bo = getBusinessObject(element);
 
-  var camundaInParams = extensionElementsHelper.getExtensionElements(bo, 'camunda:In');
+  var camundaInParams = extensionElementsHelper.getExtensionElements(bo, `${__namespace}:In`);
   if (camundaInParams) {
     forEach(camundaInParams, function(param) {
       if (param.businessKey !== undefined) {
@@ -102,7 +103,7 @@ function setBusinessKey(element, text, bpmnFactory) {
     }
 
     var camundaIn = elementHelper.createElement(
-      'camunda:In',
+      `${__namespace}:In`,
       { 'businessKey': text },
       extensionElements,
       bpmnFactory
@@ -173,8 +174,8 @@ module.exports = function(element, bpmnFactory, options, translate) {
   function getDelegateVariableMappingType(element) {
     var bo = getBusinessObject(element);
 
-    var boVariableMappingClass = bo.get('camunda:variableMappingClass'),
-        boVariableMappingDelegateExpression = bo.get('camunda:variableMappingDelegateExpression');
+    var boVariableMappingClass = bo.get(`${__namespace}:variableMappingClass`),
+        boVariableMappingDelegateExpression = bo.get(`${__namespace}:variableMappingDelegateExpression`);
 
     var delegateVariableMappingType = '';
     if (typeof boVariableMappingClass !== 'undefined') {
@@ -470,7 +471,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
       return {
         businessKey: (
           camundaInWithBusinessKey.length ?
-            camundaInWithBusinessKey[0].get('camunda:businessKey') :
+            camundaInWithBusinessKey[0].get(`${__namespace}:businessKey`) :
             undefined
         )
       };
@@ -512,19 +513,19 @@ module.exports = function(element, bpmnFactory, options, translate) {
     get: function(element, node) {
       var bo = getBusinessObject(element);
       return {
-        mapDecisionResult: bo.get('camunda:mapDecisionResult') || 'resultList'
+        mapDecisionResult: bo.get(`${__namespace}:mapDecisionResult`) || 'resultList'
       };
     },
 
     set: function(element, values, node) {
-      return cmdHelper.updateProperties(element, {
-        'camunda:mapDecisionResult': values.mapDecisionResult || 'resultList'
-      });
+      var obj = {};
+      obj[`${__namespace}:mapDecisionResult`] = values.mapDecisionResult || 'resultList';
+      return cmdHelper.updateProperties(element, obj);
     },
 
     hidden: function(element, node) {
       var bo = getBusinessObject(element);
-      var resultVariable = bo.get('camunda:resultVariable');
+      var resultVariable = bo.get(`${__namespace}:resultVariable`);
       return !(getCallableType(element) === 'dmn' && typeof resultVariable !== 'undefined');
     }
 
@@ -547,16 +548,15 @@ module.exports = function(element, bpmnFactory, options, translate) {
     set: function(element, values, node) {
       var delegateVariableMappingType = values.delegateVariableMappingType;
 
-      var props = {
-        'camunda:variableMappingClass' : undefined,
-        'camunda:variableMappingDelegateExpression' : undefined
-      };
+      var props = {};
+      props[`${__namespace}:variableMappingClass`] = undefined;
+      props[`${__namespace}:variableMappingDelegateExpression`] = undefined;
 
       if (delegateVariableMappingType === 'variableMappingClass') {
-        props['camunda:variableMappingClass'] = '';
+        props[`${__namespace}:variableMappingClass`] = '';
       }
       else if (delegateVariableMappingType === 'variableMappingDelegateExpression') {
-        props['camunda:variableMappingDelegateExpression'] = '';
+        props[`${__namespace}:variableMappingDelegateExpression`] = '';
       }
 
       return cmdHelper.updateProperties(element, props);
@@ -582,11 +582,11 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
       if (type === 'variableMappingClass') {
         label = translate('Class');
-        delegateVariableMapping = bo.get('camunda:variableMappingClass');
+        delegateVariableMapping = bo.get(`${__namespace}:variableMappingClass`);
       }
       else if (type === 'variableMappingDelegateExpression') {
         label = translate('Delegate Expression');
-        delegateVariableMapping = bo.get('camunda:variableMappingDelegateExpression');
+        delegateVariableMapping = bo.get(`${__namespace}:variableMappingDelegateExpression`);
       }
 
       return {
@@ -598,7 +598,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
     set: function(element, values, node) {
       var delegateVariableMapping = values.delegateVariableMapping;
 
-      var attr = 'camunda:' + getDelegateVariableMappingType(element);
+      var attr = `${__namespace}:` + getDelegateVariableMappingType(element);
 
       var props = {};
       props[attr] = delegateVariableMapping || undefined;

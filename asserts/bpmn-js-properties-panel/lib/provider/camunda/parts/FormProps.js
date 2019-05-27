@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../index')
 var getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject,
     getExtensionElements = require('../../../helper/ExtensionElementsHelper').getExtensionElements,
     removeEntry = require('../../../helper/ExtensionElementsHelper').removeEntry,
@@ -116,14 +117,16 @@ module.exports = function(group, element, bpmnFactory, translate) {
       var bo = getBusinessObject(element);
 
       return {
-        formKey: bo.get('camunda:formKey')
+        formKey: bo.get(`${__namespace}:formKey`)
       };
     },
     set: function(element, values, node) {
       var bo = getBusinessObject(element),
           formKey = values.formKey || undefined;
 
-      return cmdHelper.updateBusinessObject(element, bo, { 'camunda:formKey': formKey });
+      var obj = {};
+      obj[`${__namespace}:formKey`] = formKey;
+      return cmdHelper.updateBusinessObject(element, bo, obj);
     }
   }));
 
@@ -144,7 +147,7 @@ module.exports = function(group, element, bpmnFactory, translate) {
       var formData = formHelper.getFormData(element);
 
       if (!formData) {
-        formData = elementHelper.createElement('camunda:FormData', { fields: [] }, extensionElements, bpmnFactory);
+        formData = elementHelper.createElement(`${__namespace}:FormData`, { fields: [] }, extensionElements, bpmnFactory);
         commands.push(cmdHelper.addAndRemoveElementsFromList(
           element,
           extensionElements,
@@ -155,7 +158,7 @@ module.exports = function(group, element, bpmnFactory, translate) {
         ));
       }
 
-      var field = elementHelper.createElement('camunda:FormField', { id: value }, formData, bpmnFactory);
+      var field = elementHelper.createElement(`${__namespace}:FormField`, { id: value }, formData, bpmnFactory);
       if (typeof formData.fields !== 'undefined') {
         commands.push(cmdHelper.addElementsTolist(element, formData, 'fields', [ field ]));
       } else {
@@ -166,7 +169,7 @@ module.exports = function(group, element, bpmnFactory, translate) {
       return commands;
     },
     removeExtensionElement: function(element, extensionElements, value, idx) {
-      var formData = getExtensionElements(getBusinessObject(element), 'camunda:FormData')[0],
+      var formData = getExtensionElements(getBusinessObject(element), `${__namespace}:FormData`)[0],
           entry = formData.fields[idx],
           commands = [];
 
@@ -209,7 +212,7 @@ module.exports = function(group, element, bpmnFactory, translate) {
     get: function(element, node) {
       var result = { businessKey: '' };
       var bo = getBusinessObject(element);
-      var formDataExtension = getExtensionElements(bo, 'camunda:FormData');
+      var formDataExtension = getExtensionElements(bo, `${__namespace}:FormData`);
       if (formDataExtension) {
         var formData = formDataExtension[0];
         var storedValue = formData.get('businessKey');
@@ -218,7 +221,7 @@ module.exports = function(group, element, bpmnFactory, translate) {
       return result;
     },
     set: function(element, values, node) {
-      var formData = getExtensionElements(getBusinessObject(element), 'camunda:FormData')[0];
+      var formData = getExtensionElements(getBusinessObject(element), `${__namespace}:FormData`)[0];
       return cmdHelper.updateBusinessObject(element, formData, { 'businessKey': values.businessKey || undefined });
     },
     hidden: function(element, node) {
@@ -309,7 +312,7 @@ module.exports = function(group, element, bpmnFactory, translate) {
     },
     set: function(element, values, node) {
       var selectedFormField = getSelectedFormField(element, node),
-          formData = getExtensionElements(getBusinessObject(element), 'camunda:FormData')[0],
+          formData = getExtensionElements(getBusinessObject(element), `${__namespace}:FormData`)[0],
           commands = [];
 
       if (selectedFormField.type === 'enum' && values.type !== 'enum') {
@@ -375,7 +378,7 @@ module.exports = function(group, element, bpmnFactory, translate) {
           id = generateValueId();
 
       var enumValue = elementHelper.createElement(
-        'camunda:Value',
+        `${__namespace}:Value`,
         { id: id, name: undefined },
         getBusinessObject(element),
         bpmnFactory
@@ -441,13 +444,13 @@ module.exports = function(group, element, bpmnFactory, translate) {
 
       if (!validation) {
         // create validation business object and add it to form data, if it doesn't exist
-        validation = elementHelper.createElement('camunda:Validation', {}, getBusinessObject(element), bpmnFactory);
+        validation = elementHelper.createElement(`${__namespace}:Validation`, {}, getBusinessObject(element), bpmnFactory);
 
         commands.push(cmdHelper.updateBusinessObject(element, formField, { 'validation': validation }));
       }
 
       var newConstraint = elementHelper.createElement(
-        'camunda:Constraint',
+        `${__namespace}:Constraint`,
         { name: undefined, config: undefined },
         validation,
         bpmnFactory

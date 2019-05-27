@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var is = require('bpmn-js/lib/util/ModelUtil').is;
 
 var entryFactory = require('../../../../factory/EntryFactory');
@@ -31,7 +32,7 @@ function createExtensionElements(parent, bpmnFactory) {
 }
 
 function createFailedJobRetryTimeCycle(parent, bpmnFactory, cycle) {
-  return elementHelper.createElement('camunda:FailedJobRetryTimeCycle', { body: cycle }, parent, bpmnFactory);
+  return elementHelper.createElement(`${__namespace}:FailedJobRetryTimeCycle`, { body: cycle }, parent, bpmnFactory);
 }
 
 module.exports = function(element, bpmnFactory, options, translate) {

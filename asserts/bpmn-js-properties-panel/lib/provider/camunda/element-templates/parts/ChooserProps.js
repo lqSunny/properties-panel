@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var entryFactory = require('../../../../factory/EntryFactory'),
     is = require('bpmn-js/lib/util/ModelUtil').is,
     getTemplate = require('../Helper').getTemplate,
@@ -28,7 +29,7 @@ module.exports = function(group, element, elementTemplates, translate) {
   group.entries.push(entryFactory.selectBox({
     id: 'elementTemplate-chooser',
     label: translate('Element Template'),
-    modelProperty: 'camunda:modelerTemplate',
+    modelProperty: `${__namespace}:modelerTemplate`,
     selectOptions: options,
     set: function(element, properties) {
       return applyTemplate(element, properties[TEMPLATE_ATTR], elementTemplates);
@@ -63,7 +64,7 @@ function applyTemplate(element, newTemplateId, elementTemplates) {
   }
 
   return {
-    cmd: 'propertiesPanel.camunda.changeTemplate',
+    cmd: `propertiesPanel.${__namespace}.changeTemplate`,
     context: {
       element: element,
       oldTemplate: oldTemplate,

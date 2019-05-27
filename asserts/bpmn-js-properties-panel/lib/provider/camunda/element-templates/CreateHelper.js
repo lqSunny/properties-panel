@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../index')
 var assign = require('lodash/assign');
 
 /**
@@ -18,7 +19,7 @@ function createInputParameter(binding, value, bpmnFactory) {
       parameterDefinition;
 
   if (scriptFormat) {
-    parameterDefinition = bpmnFactory.create('camunda:Script', {
+    parameterDefinition = bpmnFactory.create(`${__namespace}:Script`, {
       scriptFormat: scriptFormat,
       value: value
     });
@@ -26,7 +27,7 @@ function createInputParameter(binding, value, bpmnFactory) {
     parameterValue = value;
   }
 
-  return bpmnFactory.create('camunda:InputParameter', {
+  return bpmnFactory.create(`${__namespace}:InputParameter`, {
     name: binding.name,
     value: parameterValue,
     definition: parameterDefinition
@@ -52,7 +53,7 @@ function createOutputParameter(binding, value, bpmnFactory) {
       parameterDefinition;
 
   if (scriptFormat) {
-    parameterDefinition = bpmnFactory.create('camunda:Script', {
+    parameterDefinition = bpmnFactory.create(`${__namespace}:Script`, {
       scriptFormat: scriptFormat,
       value: binding.source
     });
@@ -60,7 +61,7 @@ function createOutputParameter(binding, value, bpmnFactory) {
     parameterValue = binding.source;
   }
 
-  return bpmnFactory.create('camunda:OutputParameter', {
+  return bpmnFactory.create(`${__namespace}:OutputParameter`, {
     name: value,
     value: parameterValue,
     definition: parameterDefinition
@@ -80,7 +81,7 @@ module.exports.createOutputParameter = createOutputParameter;
  * @return {ModdleElement}
  */
 function createCamundaProperty(binding, value, bpmnFactory) {
-  return bpmnFactory.create('camunda:Property', {
+  return bpmnFactory.create(`${__namespace}:Property`, {
     name: binding.name,
     value: value || ''
   });
@@ -102,7 +103,7 @@ function createCamundaIn(binding, value, bpmnFactory) {
 
   var properties = createCamundaInOutAttrs(binding, value);
 
-  return bpmnFactory.create('camunda:In', properties);
+  return bpmnFactory.create(`${__namespace}:In`, properties);
 }
 
 module.exports.createCamundaIn = createCamundaIn;
@@ -118,7 +119,7 @@ module.exports.createCamundaIn = createCamundaIn;
  * @return {ModdleElement}
  */
 function createCamundaInWithBusinessKey(binding, value, bpmnFactory) {
-  return bpmnFactory.create('camunda:In', {
+  return bpmnFactory.create(`${__namespace}:In`, {
     businessKey: value
   });
 }
@@ -138,7 +139,7 @@ module.exports.createCamundaInWithBusinessKey = createCamundaInWithBusinessKey;
 function createCamundaOut(binding, value, bpmnFactory) {
   var properties = createCamundaInOutAttrs(binding, value);
 
-  return bpmnFactory.create('camunda:Out', properties);
+  return bpmnFactory.create(`${__namespace}:Out`, properties);
 }
 
 module.exports.createCamundaOut = createCamundaOut;
@@ -159,7 +160,7 @@ function createCamundaExecutionListenerScript(binding, value, bpmnFactory) {
       parameterDefinition;
 
   if (scriptFormat) {
-    parameterDefinition = bpmnFactory.create('camunda:Script', {
+    parameterDefinition = bpmnFactory.create(`${__namespace}:Script`, {
       scriptFormat: scriptFormat,
       value: value
     });
@@ -167,7 +168,7 @@ function createCamundaExecutionListenerScript(binding, value, bpmnFactory) {
     parameterValue = value;
   }
 
-  return bpmnFactory.create('camunda:ExecutionListener', {
+  return bpmnFactory.create(`${__namespace}:ExecutionListener`, {
     event: binding.event,
     value: parameterValue,
     script: parameterDefinition
@@ -201,7 +202,7 @@ function createCamundaFieldInjection(binding, value, bpmnFactory) {
   }
   props.name = binding.name;
 
-  return bpmnFactory.create('camunda:Field', props);
+  return bpmnFactory.create(`${__namespace}:Field`, props);
 }
 module.exports.createCamundaFieldInjection = createCamundaFieldInjection;
 

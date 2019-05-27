@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var assign = require('lodash/assign');
 
 var entryFactory = require('../../../../factory/EntryFactory'),
@@ -23,14 +24,14 @@ var createCamundaProperty = require('../CreateHelper').createCamundaProperty,
     createCamundaInWithBusinessKey = require('../CreateHelper').createCamundaInWithBusinessKey,
     createCamundaFieldInjection = require('../CreateHelper').createCamundaFieldInjection;
 
-var CAMUNDA_PROPERTY_TYPE = 'camunda:property',
-    CAMUNDA_INPUT_PARAMETER_TYPE = 'camunda:inputParameter',
-    CAMUNDA_OUTPUT_PARAMETER_TYPE = 'camunda:outputParameter',
-    CAMUNDA_IN_TYPE = 'camunda:in',
-    CAMUNDA_OUT_TYPE = 'camunda:out',
-    CAMUNDA_IN_BUSINESS_KEY_TYPE = 'camunda:in:businessKey',
-    CAMUNDA_EXECUTION_LISTENER_TYPE = 'camunda:executionListener',
-    CAMUNDA_FIELD = 'camunda:field';
+var CAMUNDA_PROPERTY_TYPE = `${__namespace}:property`,
+    CAMUNDA_INPUT_PARAMETER_TYPE = `${__namespace}:inputParameter`,
+    CAMUNDA_OUTPUT_PARAMETER_TYPE = `${__namespace}:outputParameter`,
+    CAMUNDA_IN_TYPE = `${__namespace}:in`,
+    CAMUNDA_OUT_TYPE = `${__namespace}:out`,
+    CAMUNDA_IN_BUSINESS_KEY_TYPE = `${__namespace}:in:businessKey`,
+    CAMUNDA_EXECUTION_LISTENER_TYPE = `${__namespace}:executionListener`,
+    CAMUNDA_FIELD = `${__namespace}:field`;
 
 var BASIC_MODDLE_TYPES = [
   'Boolean',
@@ -286,7 +287,7 @@ function getPropertyValue(element, property) {
     if (scope) {
       camundaProperties = bo.get('properties');
     } else {
-      camundaProperties = findExtension(bo, 'camunda:Properties');
+      camundaProperties = findExtension(bo, `${__namespace}:Properties`);
     }
 
     if (camundaProperties) {
@@ -308,7 +309,7 @@ function getPropertyValue(element, property) {
     if (scope) {
       inputOutput = bo.get('inputOutput');
     } else {
-      inputOutput = findExtension(bo, 'camunda:InputOutput');
+      inputOutput = findExtension(bo, `${__namespace}:InputOutput`);
     }
 
     if (!inputOutput) {
@@ -371,7 +372,7 @@ function getPropertyValue(element, property) {
     if (scope) {
       executionListener = bo.get('executionListener');
     } else {
-      executionListener = findExtension(bo, 'camunda:ExecutionListener');
+      executionListener = findExtension(bo, `${__namespace}:ExecutionListener`);
     }
 
     return executionListener.script.value;
@@ -379,7 +380,7 @@ function getPropertyValue(element, property) {
 
   var fieldInjection;
   if (CAMUNDA_FIELD === bindingType) {
-    var fieldInjections = findExtensions(bo, [ 'camunda:Field' ]);
+    var fieldInjections = findExtensions(bo, [ `${__namespace}:Field` ]);
     fieldInjections.forEach(function(item) {
       if (item.name === binding.name) {
         fieldInjection = item;
@@ -504,11 +505,11 @@ function setPropertyValue(element, property, value, bpmnFactory) {
     if (scope) {
       camundaProperties = bo.get('properties');
     } else {
-      camundaProperties = findExtension(extensionElements, 'camunda:Properties');
+      camundaProperties = findExtension(extensionElements, `${__namespace}:Properties`);
     }
 
     if (!camundaProperties) {
-      camundaProperties = elementHelper.createElement('camunda:Properties', null, bo, bpmnFactory);
+      camundaProperties = elementHelper.createElement(`${__namespace}:Properties`, null, bo, bpmnFactory);
 
       if (scope) {
         updates.push(cmdHelper.updateBusinessObject(
@@ -547,12 +548,12 @@ function setPropertyValue(element, property, value, bpmnFactory) {
     if (scope) {
       inputOutput = bo.get('inputOutput');
     } else {
-      inputOutput = findExtension(extensionElements, 'camunda:InputOutput');
+      inputOutput = findExtension(extensionElements, `${__namespace}:InputOutput`);
     }
 
     // create inputOutput element, if it do not exist (yet)
     if (!inputOutput) {
-      inputOutput = elementHelper.createElement('camunda:InputOutput', null, bo, bpmnFactory);
+      inputOutput = elementHelper.createElement(`${__namespace}:InputOutput`, null, bo, bpmnFactory);
 
       if (scope) {
         updates.push(cmdHelper.updateBusinessObject(
@@ -630,7 +631,7 @@ function setPropertyValue(element, property, value, bpmnFactory) {
   }
 
   if (bindingType === CAMUNDA_FIELD) {
-    var existingFieldInjections = findExtensions(bo, [ 'camunda:Field' ]);
+    var existingFieldInjections = findExtensions(bo, [ `${__namespace}:Field` ]);
     var newFieldInjections = [];
 
     if (existingFieldInjections.length > 0) {

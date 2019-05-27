@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var entryFactory = require('../../../../factory/EntryFactory');
 
 var cmdHelper = require('../../../../helper/CmdHelper');
@@ -16,7 +17,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
     get: function(element, node) {
       var bo = getBusinessObject(element);
-      var candidateStarterGroups = bo.get('camunda:candidateStarterGroups');
+      var candidateStarterGroups = bo.get(`${__namespace}:candidateStarterGroups`);
 
       return {
         candidateStarterGroups: candidateStarterGroups ? candidateStarterGroups : ''
@@ -25,9 +26,9 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
     set: function(element, values) {
       var bo = getBusinessObject(element);
-      return cmdHelper.updateBusinessObject(element, bo, {
-        'camunda:candidateStarterGroups': values.candidateStarterGroups || undefined
-      });
+      var obj = {};
+      obj[`${__namespace}:candidateStarterGroups`] = values.candidateStarterGroups || undefined;
+      return cmdHelper.updateBusinessObject(element, bo, obj);
     }
 
   });
@@ -40,7 +41,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
     get: function(element, node) {
       var bo = getBusinessObject(element);
-      var candidateStarterUsers = bo.get('camunda:candidateStarterUsers');
+      var candidateStarterUsers = bo.get(`${__namespace}:candidateStarterUsers`);
 
       return {
         candidateStarterUsers: candidateStarterUsers ? candidateStarterUsers : ''
@@ -49,9 +50,9 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
     set: function(element, values) {
       var bo = getBusinessObject(element);
-      return cmdHelper.updateBusinessObject(element, bo, {
-        'camunda:candidateStarterUsers': values.candidateStarterUsers || undefined
-      });
+      var obj = {};
+      obj[`${__namespace}:candidateStarterUsers`] = values.candidateStarterUsers || undefined;
+      return cmdHelper.updateBusinessObject(element, bo, obj);
     }
 
   });

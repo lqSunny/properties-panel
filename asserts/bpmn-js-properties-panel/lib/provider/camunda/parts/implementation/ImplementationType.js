@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var entryFactory = require('../../../../factory/EntryFactory'),
     cmdHelper = require('../../../../helper/CmdHelper'),
     extensionElementsHelper = require('../../../../helper/ExtensionElementsHelper'),
@@ -10,26 +11,23 @@ var map = require('lodash/map');
 
 var DEFAULT_DELEGATE_PROPS = [ 'class', 'expression', 'delegateExpression' ];
 
-var DELEGATE_PROPS = {
-  'camunda:class': undefined,
-  'camunda:expression': undefined,
-  'camunda:delegateExpression': undefined,
-  'camunda:resultVariable': undefined
-};
+var DELEGATE_PROPS = {};
+DELEGATE_PROPS[`${__namespace}:class`] = undefined;
+DELEGATE_PROPS[`${__namespace}:expression`] = undefined;
+DELEGATE_PROPS[`${__namespace}:delegateExpression`] = undefined;
+DELEGATE_PROPS[`${__namespace}:resultVariable`] = undefined;
 
-var DMN_CAPABLE_PROPS = {
-  'camunda:decisionRef': undefined,
-  'camunda:decisionRefBinding': 'latest',
-  'camunda:decisionRefVersion': undefined,
-  'camunda:mapDecisionResult': 'resultList',
-  'camunda:decisionRefTenantId': undefined
-};
+var DMN_CAPABLE_PROPS = {};
+DMN_CAPABLE_PROPS[`${__namespace}:decisionRef`] = undefined;
+DMN_CAPABLE_PROPS[`${__namespace}:decisionRefBinding`] = 'latest';
+DMN_CAPABLE_PROPS[`${__namespace}:decisionRefVersion`] = undefined;
+DMN_CAPABLE_PROPS[`${__namespace}:mapDecisionResult`] = 'resultList';
+DMN_CAPABLE_PROPS[`${__namespace}:decisionRefTenantId`] =undefined ;
 
 
-var EXTERNAL_CAPABLE_PROPS = {
-  'camunda:type': undefined,
-  'camunda:topic': undefined
-};
+var EXTERNAL_CAPABLE_PROPS = {};
+EXTERNAL_CAPABLE_PROPS[`${__namespace}:type`] = undefined;
+EXTERNAL_CAPABLE_PROPS[`${__namespace}:topic`] = undefined;
 
 module.exports = function(element, bpmnFactory, options, translate) {
 
@@ -108,31 +106,31 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
         var newValue = '';
         if (DEFAULT_DELEGATE_PROPS.indexOf(oldType) !== -1) {
-          newValue = bo.get('camunda:' + oldType);
+          newValue = bo.get(`${__namespace}:` + oldType);
         }
-        props['camunda:' + newType] = newValue;
+        props[`${__namespace}:` + newType] = newValue;
       }
 
       if (hasDmnSupport) {
         props = assign(props, DMN_CAPABLE_PROPS);
         if (newType === 'dmn') {
-          props['camunda:decisionRef'] = '';
+          props[`${__namespace}:decisionRef`] = '';
         }
       }
 
       if (hasExternalSupport) {
         props = assign(props, EXTERNAL_CAPABLE_PROPS);
         if (newType === 'external') {
-          props['camunda:type'] = 'external';
-          props['camunda:topic'] = '';
+          props[`${__namespace}:type`] = 'external';
+          props[`${__namespace}:topic`] = '';
         }
       }
 
       if (hasScriptSupport) {
-        props['camunda:script'] = undefined;
+        props[`${__namespace}:script`] = undefined;
 
         if (newType === 'script') {
-          props['camunda:script'] = elementHelper.createElement('camunda:Script', {}, bo, bpmnFactory);
+          props[`${__namespace}:script`] = elementHelper.createElement(`${__namespace}:Script`, {}, bo, bpmnFactory);
         }
       }
 
@@ -140,7 +138,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
       commands.push(cmdHelper.updateBusinessObject(element, bo, props));
 
       if (hasServiceTaskLikeSupport) {
-        var connectors = extensionElementsHelper.getExtensionElements(bo, 'camunda:Connector');
+        var connectors = extensionElementsHelper.getExtensionElements(bo, `${__namespace}:Connector`);
         commands.push(map(connectors, function(connector) {
           return extensionElementsHelper.removeEntry(bo, element, connector);
         }));
@@ -151,7 +149,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
             extensionElements = elementHelper.createElement('bpmn:ExtensionElements', { values: [] }, bo, bpmnFactory);
             commands.push(cmdHelper.updateBusinessObject(element, bo, { extensionElements: extensionElements }));
           }
-          var connector = elementHelper.createElement('camunda:Connector', {}, extensionElements, bpmnFactory);
+          var connector = elementHelper.createElement(`${__namespace}:Connector`, {}, extensionElements, bpmnFactory);
           commands.push(cmdHelper.addAndRemoveElementsFromList(
             element,
             extensionElements,

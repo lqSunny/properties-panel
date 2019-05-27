@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var ChangeElementTemplateHandler = require('./ChangeElementTemplateHandler');
 
 var getTemplate = require('../Helper').getTemplate,
@@ -7,7 +8,7 @@ var getTemplate = require('../Helper').getTemplate,
 
 function registerHandlers(commandStack, elementTemplates, eventBus, elementRegistry) {
   commandStack.registerHandler(
-    'propertiesPanel.camunda.changeTemplate',
+    `propertiesPanel.${__namespace}.changeTemplate`,
     ChangeElementTemplateHandler
   );
 
@@ -35,7 +36,7 @@ function applyDefaultTemplate(element, elementTemplates, commandStack) {
   if (!getTemplate(element, elementTemplates)
       && getDefaultTemplate(element, elementTemplates)) {
 
-    var command = 'propertiesPanel.camunda.changeTemplate';
+    var command = `propertiesPanel.${__namespace}.changeTemplate`;
     var commandContext = {
       element: element,
       newTemplate: getDefaultTemplate(element, elementTemplates)

@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var domQuery = require('min-dom').query,
 
     utils = require('../../../../Utils');
@@ -55,7 +56,7 @@ module.exports = function(scriptLanguagePropName, scriptValuePropName, isFormatR
       var values = {};
 
       // read values from xml:
-      var boScriptResource = bo.get('camunda:resource'),
+      var boScriptResource = bo.get(`${__namespace}:resource`),
           boScript = bo.get(scriptValuePropName),
           boScriptFormat = bo.get(scriptLanguagePropName);
 
@@ -79,9 +80,8 @@ module.exports = function(scriptLanguagePropName, scriptValuePropName, isFormatR
           scriptValue = values.scriptValue;
 
       // init update
-      var update = {
-        'camunda:resource': undefined
-      };
+      var update = {};
+      update[`${__namespace}:resource`] = undefined;
       update[scriptValuePropName] = undefined;
       update[scriptLanguagePropName] = undefined;
 
@@ -96,7 +96,7 @@ module.exports = function(scriptLanguagePropName, scriptValuePropName, isFormatR
 
       // set either inline script or resource
       if ('scriptResource' === scriptType) {
-        update['camunda:resource'] = scriptResourceValue || '';
+        update[`${__namespace}:resource`] = scriptResourceValue || '';
       } else {
         update[scriptValuePropName] = scriptValue || '';
       }

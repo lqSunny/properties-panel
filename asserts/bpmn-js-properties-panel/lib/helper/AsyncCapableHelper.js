@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../index')
 var map = require('lodash/map');
 
 var extensionElementsHelper = require('./ExtensionElementsHelper');
@@ -13,7 +14,7 @@ var extensionElementsHelper = require('./ExtensionElementsHelper');
  * @return {boolean} a boolean value
  */
 function isAsyncBefore(bo) {
-  return !!(bo.get('camunda:asyncBefore') || bo.get('camunda:async'));
+  return !!(bo.get(`${__namespace}:asyncBefore`) || bo.get(`${__namespace}:async`));
 }
 
 module.exports.isAsyncBefore = isAsyncBefore;
@@ -27,7 +28,7 @@ module.exports.isAsyncBefore = isAsyncBefore;
  * @return {boolean} a boolean value
  */
 function isAsyncAfter(bo) {
-  return !!bo.get('camunda:asyncAfter');
+  return !!bo.get(`${__namespace}:asyncAfter`);
 }
 
 module.exports.isAsyncAfter = isAsyncAfter;
@@ -41,7 +42,7 @@ module.exports.isAsyncAfter = isAsyncAfter;
  * @return {boolean} a boolean value
  */
 function isExclusive(bo) {
-  return !!bo.get('camunda:exclusive');
+  return !!bo.get(`${__namespace}:exclusive`);
 }
 
 module.exports.isExclusive = isExclusive;
@@ -54,7 +55,7 @@ module.exports.isExclusive = isExclusive;
  * @return {Array<ModdleElement>} a list of 'camunda:FailedJobRetryTimeCycle'
  */
 function getFailedJobRetryTimeCycle(bo) {
-  return (extensionElementsHelper.getExtensionElements(bo, 'camunda:FailedJobRetryTimeCycle') || [])[0];
+  return (extensionElementsHelper.getExtensionElements(bo, `${__namespace}:FailedJobRetryTimeCycle`) || [])[0];
 }
 
 module.exports.getFailedJobRetryTimeCycle = getFailedJobRetryTimeCycle;
@@ -67,7 +68,7 @@ module.exports.getFailedJobRetryTimeCycle = getFailedJobRetryTimeCycle;
  * @return {Array<ModdleElement>} a list of 'camunda:FailedJobRetryTimeCycle'
  */
 function removeFailedJobRetryTimeCycle(bo, element) {
-  var retryTimeCycles = extensionElementsHelper.getExtensionElements(bo, 'camunda:FailedJobRetryTimeCycle');
+  var retryTimeCycles = extensionElementsHelper.getExtensionElements(bo, `${__namespace}:FailedJobRetryTimeCycle`);
   return map(retryTimeCycles, function(cycle) {
     return extensionElementsHelper.removeEntry(bo, element, cycle);
   });

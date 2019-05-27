@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var is = require('bpmn-js/lib/util/ModelUtil').is;
 
 var elementHelper = require('../../../../helper/ElementHelper'),
@@ -16,15 +17,15 @@ function createElement(type, parent, factory, properties) {
 }
 
 function isScript(elem) {
-  return is(elem, 'camunda:Script');
+  return is(elem, `${__namespace}:Script`);
 }
 
 function isList(elem) {
-  return is(elem, 'camunda:List');
+  return is(elem, `${__namespace}:List`);
 }
 
 function isMap(elem) {
-  return is(elem, 'camunda:Map');
+  return is(elem, `${__namespace}:Map`);
 }
 
 function ensureInputOutputSupported(element, insideConnector) {
@@ -33,19 +34,18 @@ function ensureInputOutputSupported(element, insideConnector) {
 
 module.exports = function(element, bpmnFactory, options, translate) {
 
-  var typeInfo = {
-    'camunda:Map': {
+  var typeInfo = {};
+  typeInfo[`${__namespace}:Map`] = {
       value: 'map',
       label: translate('Map')
-    },
-    'camunda:List': {
+  };
+  typeInfo[`${__namespace}:List`] = {
       value: 'list',
       label: translate('List')
-    },
-    'camunda:Script': {
+  };
+  typeInfo[`${__namespace}:Script`] = {
       value: 'script',
       label: translate('Script')
-    }
   };
 
   options = options || {};
@@ -155,13 +155,13 @@ module.exports = function(element, bpmnFactory, options, translate) {
       var parameterType = values.parameterType;
 
       if (parameterType === 'script') {
-        properties.definition = createParameterTypeElem('camunda:Script');
+        properties.definition = createParameterTypeElem(`${__namespace}:Script`);
       }
       else if (parameterType === 'list') {
-        properties.definition = createParameterTypeElem('camunda:List');
+        properties.definition = createParameterTypeElem(`${__namespace}:List`);
       }
       else if (parameterType === 'map') {
-        properties.definition = createParameterTypeElem('camunda:Map');
+        properties.definition = createParameterTypeElem(`${__namespace}:Map`);
       }
 
       return cmdHelper.updateBusinessObject(element, bo, properties);
@@ -259,7 +259,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
     addElement: function(element, node) {
       var bo = getSelected(element, node);
-      var newValue = createElement('camunda:Value', bo.definition, bpmnFactory, { value: undefined });
+      var newValue = createElement(`${__namespace}:Value`, bo.definition, bpmnFactory, { value: undefined });
       return cmdHelper.addElementsTolist(element, bo.definition, 'items', [ newValue ]);
     },
 
@@ -326,7 +326,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
     addElement: function(element, node) {
       var bo = getSelected(element, node);
-      var newEntry = createElement('camunda:Entry', bo.definition, bpmnFactory, { key: undefined, value: undefined });
+      var newEntry = createElement(`${__namespace}:Entry`, bo.definition, bpmnFactory, { key: undefined, value: undefined });
       return cmdHelper.addElementsTolist(element, bo.definition, 'entries', [ newEntry ]);
     },
 

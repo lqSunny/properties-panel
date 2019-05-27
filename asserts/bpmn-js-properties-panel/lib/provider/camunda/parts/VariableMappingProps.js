@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../index')
 var is = require('bpmn-js/lib/util/ModelUtil').is,
     isAny = require('bpmn-js/lib/features/modeling/util/ModelingUtil').isAny,
     getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject;
@@ -54,8 +55,8 @@ function getInOutType(mapping) {
   return inOutType;
 }
 
-var CAMUNDA_IN_EXTENSION_ELEMENT = 'camunda:In',
-    CAMUNDA_OUT_EXTENSION_ELEMENT = 'camunda:Out';
+var CAMUNDA_IN_EXTENSION_ELEMENT = `${__namespace}:In`,
+    CAMUNDA_OUT_EXTENSION_ELEMENT = `${__namespace}:Out`;
 
 var WHITESPACE_REGEX = /\s/;
 
@@ -79,7 +80,7 @@ module.exports = function(group, element, bpmnFactory, translate) {
 
   var signalEventDefinition = eventDefinitionHelper.getSignalEventDefinition(element);
 
-  if (!is(element, 'camunda:CallActivity') && !signalEventDefinition) {
+  if (!is(element, `${__namespace}:CallActivity`) && !signalEventDefinition) {
     return;
   }
 

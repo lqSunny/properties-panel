@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject;
 
 var elementHelper = require('../../../../helper/ElementHelper'),
@@ -40,7 +41,7 @@ function createElement(type, parent, factory, properties) {
 }
 
 function createInputOutput(parent, bpmnFactory, properties) {
-  return createElement('camunda:InputOutput', parent, bpmnFactory, properties);
+  return createElement(`${__namespace}:InputOutput`, parent, bpmnFactory, properties);
 }
 
 function createParameter(type, parent, bpmnFactory, properties) {
@@ -58,11 +59,10 @@ function ensureOutparameterSupported(element, insideConnector) {
 
 module.exports = function(element, bpmnFactory, options, translate) {
 
-  var TYPE_LABEL = {
-    'camunda:Map': translate('Map'),
-    'camunda:List': translate('List'),
-    'camunda:Script': translate('Script')
-  };
+  var TYPE_LABEL = {};
+  TYPE_LABEL[`${__namespace}:Map`] = translate('Map');
+  TYPE_LABEL[`${__namespace}:List`] = translate('List');
+  TYPE_LABEL[`${__namespace}:Script`] = translate('Script');
 
   options = options || {};
 
@@ -176,7 +176,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
     prefix: 'Input',
     resizable: true,
 
-    createExtensionElement: newElement('camunda:InputParameter', 'inputParameters'),
+    createExtensionElement: newElement(`${__namespace}:InputParameter`, 'inputParameters'),
     removeExtensionElement: removeElement(getInputParameter, 'inputParameters', 'outputParameters'),
 
     getExtensionElements: function(element) {
@@ -203,7 +203,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
       prefix: 'Output',
       resizable: true,
 
-      createExtensionElement: newElement('camunda:OutputParameter', 'outputParameters'),
+      createExtensionElement: newElement(`${__namespace}:OutputParameter`, 'outputParameters'),
       removeExtensionElement: removeElement(getOutputParameter, 'outputParameters', 'inputParameters'),
 
       getExtensionElements: function(element) {

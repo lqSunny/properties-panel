@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../index')
 var entryFactory = require('../../../factory/EntryFactory'),
     cmdHelper = require('../../../helper/CmdHelper'),
     is = require('bpmn-js/lib/util/ModelUtil').is,
@@ -26,16 +27,16 @@ module.exports = function(group, element, translate) {
         var processBo = bo.get('processRef');
 
         return {
-          versionTag: processBo.get('camunda:versionTag')
+          versionTag: processBo.get(`${__namespace}:versionTag`)
         };
       };
 
       versionTagEntry.set = function(element, values) {
         var processBo = bo.get('processRef');
 
-        return cmdHelper.updateBusinessObject(element, processBo, {
-          'camunda:versionTag': values.versionTag || undefined
-        });
+        var obj = {};
+        obj[`${__namespace}:versionTag`] = values.versionTag || undefined;
+        return cmdHelper.updateBusinessObject(element, processBo, obj);
       };
     }
 

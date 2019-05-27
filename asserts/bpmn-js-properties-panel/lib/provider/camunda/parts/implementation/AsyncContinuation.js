@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var assign = require('lodash/assign');
 
 var entryFactory = require('../../../../factory/EntryFactory');
@@ -52,14 +53,15 @@ module.exports = function(element, bpmnFactory, options, translate) {
       var bo = getBusinessObject(element);
       var asyncBefore = !!values.asyncBefore;
 
-      var props = {
-        'camunda:asyncBefore': asyncBefore,
-        'camunda:async': false
-      };
+      var props = {};
+      props[`${__namespace}:asyncBefore`] = asyncBefore;
+      props[`${__namespace}:async`] = false;
 
       var commands = [];
       if (!isAsyncAfter(bo) && !asyncBefore) {
-        props = assign({ 'camunda:exclusive' : true }, props);
+        var obj = {};
+        obj[`${__namespace}:exclusive`] = true;
+        props = assign(obj, props);
         if (canRemoveFailedJobRetryTimeCycle(element)) {
           commands.push(removeFailedJobRetryTimeCycle(bo, element));
         }
@@ -87,13 +89,14 @@ module.exports = function(element, bpmnFactory, options, translate) {
       var bo = getBusinessObject(element);
       var asyncAfter = !!values.asyncAfter;
 
-      var props = {
-        'camunda:asyncAfter': asyncAfter
-      };
+      var props = {};
+      props[`${__namespace}:asyncAfter`] = asyncAfter;
 
       var commands = [];
       if (!isAsyncBefore(bo) && !asyncAfter) {
-        props = assign({ 'camunda:exclusive' : true }, props);
+        var obj = {};
+        obj[`${__namespace}:exclusive`] = true;
+        props = assign(obj, props);
         if (canRemoveFailedJobRetryTimeCycle(element)) {
           commands.push(removeFailedJobRetryTimeCycle(bo, element));
         }
@@ -117,7 +120,9 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
     set: function(element, values) {
       var bo = getBusinessObject(element);
-      return cmdHelper.updateBusinessObject(element, bo, { 'camunda:exclusive': !!values.exclusive });
+      var obj = {};
+      obj[`${__namespace}:exclusive`] = !!values.exclusive;
+      return cmdHelper.updateBusinessObject(element, bo, obj);
     },
 
     hidden: function(element) {

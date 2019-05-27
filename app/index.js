@@ -1,9 +1,10 @@
 import $ from 'jquery';
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 
-import propertiesPanelModule from 'bpmn-js-properties-panel';
-import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/camunda';
-import camundaModdleDescriptor from 'camunda-bpmn-moddle/resources/camunda';
+import propertiesPanelModule from '../asserts/bpmn-js-properties-panel';
+import propertiesProviderModule from '../asserts/bpmn-js-properties-panel/lib/provider/camunda';
+import camundaModdleDescriptor from '../asserts/camunda-bpmn-moddle/resources/descriptor';
+
 
 import {
   debounce
@@ -22,11 +23,11 @@ var bpmnModeler = new BpmnModeler({
     parent: '#js-properties-panel'
   },
   additionalModules: [
-    propertiesPanelModule,
-    propertiesProviderModule
+    propertiesPanelModule('flowable'),
+    propertiesProviderModule()
   ],
   moddleExtensions: {
-    camunda: camundaModdleDescriptor
+    camunda: camundaModdleDescriptor('flowable')
   }
 });
 container.removeClass('with-diagram');

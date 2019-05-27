@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var is = require('bpmn-js/lib/util/ModelUtil').is;
 
 var assign = require('lodash/assign');
@@ -21,7 +22,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
     get: function(element, node) {
       var bo = getBusinessObject(element);
-      return { resultVariable: bo.get('camunda:resultVariable') };
+      return { resultVariable: bo.get(`${__namespace}:resultVariable`) };
     },
 
     set: function(element, values, node) {
@@ -29,12 +30,13 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
       var resultVariable = values.resultVariable || undefined;
 
-      var props = {
-        'camunda:resultVariable': resultVariable
-      };
+      var props = {};
+      props[`${__namespace}:resultVariable`] = resultVariable;
 
-      if (is(bo, 'camunda:DmnCapable') && !resultVariable) {
-        props = assign({ 'camunda:mapDecisionResult': 'resultList' }, props);
+      if (is(bo, `${__namespace}:DmnCapable`) && !resultVariable) {
+        var obj = {};
+        obj[`${__namespace}:mapDecisionResult`] = 'resultList';
+        props = assign(obj, props);
       }
 
       return cmdHelper.updateBusinessObject(element, bo, props);

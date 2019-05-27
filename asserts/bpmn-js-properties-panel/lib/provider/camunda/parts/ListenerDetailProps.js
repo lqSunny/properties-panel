@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../index')
 var entryFactory = require('../../../factory/EntryFactory');
 
 var cmdHelper = require('../../../helper/CmdHelper'),
@@ -116,7 +117,7 @@ module.exports = function(group, element, bpmnFactory, options, translate) {
       update[classProp] = listenerType === classProp ? '' : undefined;
       update[expressionProp] = listenerType === expressionProp ? '' : undefined;
       update[delegateExpressionProp] = listenerType === delegateExpressionProp ? '' : undefined;
-      update[scriptProp] = listenerType === scriptProp ? bpmnFactory.create('camunda:Script') : undefined;
+      update[scriptProp] = listenerType === scriptProp ? bpmnFactory.create(`${__namespace}:Script`) : undefined;
 
       return cmdHelper.updateBusinessObject(element, listener, update);
     },

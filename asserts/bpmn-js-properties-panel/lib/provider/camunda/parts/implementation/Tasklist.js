@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var entryFactory = require('../../../../factory/EntryFactory');
 
 var cmdHelper = require('../../../../helper/CmdHelper');
@@ -15,7 +16,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
     get: function(element, node) {
       var bo = getBusinessObject(element);
-      var isStartableInTasklist = bo.get('camunda:isStartableInTasklist');
+      var isStartableInTasklist = bo.get(`${__namespace}:isStartableInTasklist`);
 
       return {
         isStartableInTasklist: isStartableInTasklist ? isStartableInTasklist : ''
@@ -24,9 +25,9 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
     set: function(element, values) {
       var bo = getBusinessObject(element);
-      return cmdHelper.updateBusinessObject(element, bo, {
-        'camunda:isStartableInTasklist': !!values.isStartableInTasklist
-      });
+      var obj = {};
+      obj[`${__namespace}:isStartableInTasklist`] = !!values.isStartableInTasklist;
+      return cmdHelper.updateBusinessObject(element, bo, obj);
     }
 
   });

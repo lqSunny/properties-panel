@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var extensionElementsHelper = require('../../../../helper/ExtensionElementsHelper'),
     elementHelper = require('../../../../helper/ElementHelper'),
     cmdHelper = require('../../../../helper/CmdHelper');
@@ -22,7 +23,7 @@ var DEFAULT_PROPS = {
   'expression': undefined
 };
 
-var CAMUNDA_FIELD_EXTENSION_ELEMENT = 'camunda:Field';
+var CAMUNDA_FIELD_EXTENSION_ELEMENT = `${__namespace}:Field`;
 
 module.exports = function(element, bpmnFactory, translate, options) {
 

@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../index')
 var inherits = require('inherits');
 
 var PropertiesActivator = require('../../PropertiesActivator');
@@ -112,11 +113,11 @@ var isJobConfigEnabled = function(element) {
 
 var getInputOutputParameterLabel = function(param, translate) {
 
-  if (is(param, 'camunda:InputParameter')) {
+  if (is(param, `${__namespace}:InputParameter`)) {
     return translate('Input Parameter');
   }
 
-  if (is(param, 'camunda:OutputParameter')) {
+  if (is(param, `${__namespace}:OutputParameter`)) {
     return translate('Output Parameter');
   }
 
@@ -125,11 +126,11 @@ var getInputOutputParameterLabel = function(param, translate) {
 
 var getListenerLabel = function(param, translate) {
 
-  if (is(param, 'camunda:ExecutionListener')) {
+  if (is(param, `${__namespace}:ExecutionListener`)) {
     return translate('Execution Listener');
   }
 
-  if (is(param, 'camunda:TaskListener')) {
+  if (is(param, `${__namespace}:TaskListener`)) {
     return translate('Task Listener');
   }
 

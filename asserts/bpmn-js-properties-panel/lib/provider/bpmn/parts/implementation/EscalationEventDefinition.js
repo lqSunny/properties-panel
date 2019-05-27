@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../index')
 var entryFactory = require('../../../../factory/EntryFactory'),
     cmdHelper = require('../../../../helper/CmdHelper');
 
@@ -42,16 +43,16 @@ module.exports = function(group, element, bpmnFactory, escalationEventDefinition
       modelProperty : 'escalationCodeVariable',
 
       get: function(element) {
-        var codeVariable = escalationEventDefinition.get('camunda:escalationCodeVariable');
+        var codeVariable = escalationEventDefinition.get(`${__namespace}:escalationCodeVariable`);
         return {
           escalationCodeVariable: codeVariable
         };
       },
 
       set: function(element, values) {
-        return cmdHelper.updateBusinessObject(element, escalationEventDefinition, {
-          'camunda:escalationCodeVariable': values.escalationCodeVariable || undefined
-        });
+        var obj = {};
+        obj[`${__namespace}:escalationCodeVariable`] = values.escalationCodeVariable || undefined
+        return cmdHelper.updateBusinessObject(element, escalationEventDefinition, obj);
       }
     }));
   }

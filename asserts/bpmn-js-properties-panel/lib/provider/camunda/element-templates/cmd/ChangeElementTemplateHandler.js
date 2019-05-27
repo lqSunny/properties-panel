@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var findExtension = require('../Helper').findExtension,
     findExtensions = require('../Helper').findExtensions;
 
@@ -15,9 +16,9 @@ var createCamundaProperty = require('../CreateHelper').createCamundaProperty,
 var forEach = require('lodash/forEach');
 
 var CAMUNDA_SERVICE_TASK_LIKE = [
-  'camunda:class',
-  'camunda:delegateExpression',
-  'camunda:expression'
+  `${__namespace}:class`,
+  `${__namespace}:delegateExpression`,
+  `${__namespace}:expression`
 ];
 
 /**
@@ -46,9 +47,9 @@ function ChangeElementTemplateHandler(modeling, commandStack, bpmnFactory) {
   }
 
   function updateModelerTemplate(element, newTemplate) {
-    modeling.updateProperties(element, {
-      'camunda:modelerTemplate': newTemplate && newTemplate.id
-    });
+    var obj = {};
+    obj[`${__namespace}:modelerTemplate`] = newTemplate && newTemplate.id;
+    modeling.updateProperties(element, obj);
   }
 
   function updateIoMappings(element, newTemplate, context) {
@@ -68,7 +69,7 @@ function ChangeElementTemplateHandler(modeling, commandStack, bpmnFactory) {
       });
     } else {
       context = getOrCreateExtensionElements(element);
-      oldMappings = findExtension(element, 'camunda:InputOutput');
+      oldMappings = findExtension(element, `${__namespace}:InputOutput`);
       commandStack.execute('properties-panel.update-businessobject-list', {
         element: element,
         currentObject: context,
@@ -95,7 +96,7 @@ function ChangeElementTemplateHandler(modeling, commandStack, bpmnFactory) {
       });
     } else {
       context = getOrCreateExtensionElements(element);
-      oldMappings = findExtensions(element, ['camunda:Field']);
+      oldMappings = findExtensions(element, [`${__namespace}:Field`]);
 
       commandStack.execute('properties-panel.update-businessobject-list', {
         element: element,
@@ -125,7 +126,7 @@ function ChangeElementTemplateHandler(modeling, commandStack, bpmnFactory) {
       });
     } else {
       context = getOrCreateExtensionElements(element);
-      oldProperties = findExtension(element, 'camunda:Properties');
+      oldProperties = findExtension(element, `${__namespace}:Properties`);
 
       commandStack.execute('properties-panel.update-businessobject-list', {
         element: element,
@@ -175,7 +176,7 @@ function ChangeElementTemplateHandler(modeling, commandStack, bpmnFactory) {
       });
     } else {
       context = getOrCreateExtensionElements(element);
-      oldInOut = findExtensions(context, [ 'camunda:In', 'camunda:Out' ]);
+      oldInOut = findExtensions(context, [ `${__namespace}:In`, `${__namespace}:Out` ]);
 
       commandStack.execute('properties-panel.update-businessobject-list', {
         element: element,
@@ -204,7 +205,7 @@ function ChangeElementTemplateHandler(modeling, commandStack, bpmnFactory) {
       });
     } else {
       context = getOrCreateExtensionElements(element);
-      oldExecutionsListeners = findExtensions(context, [ 'camunda:ExecutionListener' ]);
+      oldExecutionsListeners = findExtensions(context, [ `${__namespace}:ExecutionListener` ]);
 
       commandStack.execute('properties-panel.update-businessobject-list', {
         element: element,
@@ -358,7 +359,7 @@ function createCamundaFieldInjections(template, bpmnFactory) {
   template.properties.forEach(function(p) {
     var binding = p.binding,
         bindingType = binding.type;
-    if (bindingType === 'camunda:field') {
+    if (bindingType === `${__namespace}:field`) {
       injections.push(createCamundaFieldInjection(
         binding, p.value, bpmnFactory
       ));
@@ -378,7 +379,7 @@ function createCamundaProperties(template, bpmnFactory) {
     var binding = p.binding,
         bindingType = binding.type;
 
-    if (bindingType === 'camunda:property') {
+    if (bindingType === `${__namespace}:property`) {
       properties.push(createCamundaProperty(
         binding, p.value, bpmnFactory
       ));
@@ -386,7 +387,7 @@ function createCamundaProperties(template, bpmnFactory) {
   });
 
   if (properties.length) {
-    return bpmnFactory.create('camunda:Properties', {
+    return bpmnFactory.create(`${__namespace}:Properties`, {
       values: properties
     });
   }
@@ -401,13 +402,13 @@ function createInputOutputMappings(template, bpmnFactory) {
     var binding = p.binding,
         bindingType = binding.type;
 
-    if (bindingType === 'camunda:inputParameter') {
+    if (bindingType === `${__namespace}:inputParameter`) {
       inputParameters.push(createInputParameter(
         binding, p.value, bpmnFactory
       ));
     }
 
-    if (bindingType === 'camunda:outputParameter') {
+    if (bindingType === `${__namespace}:outputParameter`) {
       outputParameters.push(createOutputParameter(
         binding, p.value, bpmnFactory
       ));
@@ -416,7 +417,7 @@ function createInputOutputMappings(template, bpmnFactory) {
 
   // do we need to create new ioMappings (?)
   if (outputParameters.length || inputParameters.length) {
-    return bpmnFactory.create('camunda:InputOutput', {
+    return bpmnFactory.create(`${__namespace}:InputOutput`, {
       inputParameters: inputParameters,
       outputParameters: outputParameters
     });
@@ -431,17 +432,17 @@ function createCamundaInOut(template, bpmnFactory) {
     var binding = p.binding,
         bindingType = binding.type;
 
-    if (bindingType === 'camunda:in') {
+    if (bindingType === `${__namespace}:in`) {
       inOuts.push(createCamundaIn(
         binding, p.value, bpmnFactory
       ));
     } else
-    if (bindingType === 'camunda:out') {
+    if (bindingType === `${__namespace}:out`) {
       inOuts.push(createCamundaOut(
         binding, p.value, bpmnFactory
       ));
     } else
-    if (bindingType === 'camunda:in:businessKey') {
+    if (bindingType === `${__namespace}:in:businessKey`) {
       inOuts.push(createCamundaInWithBusinessKey(
         binding, p.value, bpmnFactory
       ));
@@ -460,7 +461,7 @@ function createCamundaExecutionListeners(template, bpmnFactory) {
     var binding = p.binding,
         bindingType = binding.type;
 
-    if (bindingType === 'camunda:executionListener') {
+    if (bindingType === `${__namespace}:executionListener`) {
       executionListener.push(createCamundaExecutionListenerScript(
         binding, p.value, bpmnFactory
       ));

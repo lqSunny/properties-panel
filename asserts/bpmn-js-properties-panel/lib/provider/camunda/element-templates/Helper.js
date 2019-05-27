@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../index')
 var getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject;
 
 var is = require('bpmn-js/lib/util/ModelUtil').is,
@@ -8,7 +9,7 @@ var is = require('bpmn-js/lib/util/ModelUtil').is,
 var find = require('lodash/find');
 
 
-var TEMPLATE_ATTR = 'camunda:modelerTemplate';
+var TEMPLATE_ATTR = `${__namespace}:modelerTemplate`;
 
 /**
  * The BPMN 2.0 extension attribute name under
@@ -132,19 +133,19 @@ function findCamundaInOut(element, binding) {
 
   var matcher;
 
-  if (binding.type === 'camunda:in') {
+  if (binding.type === `${__namespace}:in`) {
     matcher = function(e) {
-      return is(e, 'camunda:In') && isInOut(e, binding);
+      return is(e, `${__namespace}:In`) && isInOut(e, binding);
     };
   } else
-  if (binding.type === 'camunda:out') {
+  if (binding.type === `${__namespace}:out`) {
     matcher = function(e) {
-      return is(e, 'camunda:Out') && isInOut(e, binding);
+      return is(e, `${__namespace}:Out`) && isInOut(e, binding);
     };
   } else
-  if (binding.type === 'camunda:in:businessKey') {
+  if (binding.type === `${__namespace}:in:businessKey`) {
     matcher = function(e) {
-      return is(e, 'camunda:In') && 'businessKey' in e;
+      return is(e, `${__namespace}:In`) && 'businessKey' in e;
     };
   }
 
@@ -212,14 +213,14 @@ function getExtensionElements(element) {
 
 function isInOut(element, binding) {
 
-  if (binding.type === 'camunda:in') {
+  if (binding.type === `${__namespace}:in`) {
     // find based on target attribute
     if (binding.target) {
       return element.target === binding.target;
     }
   }
 
-  if (binding.type === 'camunda:out') {
+  if (binding.type === `${__namespace}:out`) {
     // find based on source / sourceExpression
     if (binding.source) {
       return element.source === binding.source;

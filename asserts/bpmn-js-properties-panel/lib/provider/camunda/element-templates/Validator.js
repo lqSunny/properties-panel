@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../index')
 var isArray = require('lodash/isArray');
 var isObject = require('lodash/isObject');
 
@@ -8,14 +9,14 @@ var DROPDOWN_TYPE = 'Dropdown';
 var VALID_TYPES = [ 'String', 'Text', 'Boolean', 'Hidden', DROPDOWN_TYPE ];
 
 var PROPERTY_TYPE = 'property',
-    CAMUNDA_PROPERTY_TYPE = 'camunda:property',
-    CAMUNDA_INPUT_PARAMETER_TYPE = 'camunda:inputParameter',
-    CAMUNDA_OUTPUT_PARAMETER_TYPE = 'camunda:outputParameter',
-    CAMUNDA_IN_TYPE = 'camunda:in',
-    CAMUNDA_OUT_TYPE = 'camunda:out',
-    CAMUNDA_IN_BUSINESS_KEY_TYPE = 'camunda:in:businessKey',
-    CAMUNDA_EXECUTION_LISTENER = 'camunda:executionListener',
-    CAMUNDA_FIELD = 'camunda:field';
+    CAMUNDA_PROPERTY_TYPE = `${__namespace}:property`,
+    CAMUNDA_INPUT_PARAMETER_TYPE = `${__namespace}:inputParameter`,
+    CAMUNDA_OUTPUT_PARAMETER_TYPE = `${__namespace}:outputParameter`,
+    CAMUNDA_IN_TYPE = `${__namespace}:in`,
+    CAMUNDA_OUT_TYPE = `${__namespace}:out`,
+    CAMUNDA_IN_BUSINESS_KEY_TYPE = `${__namespace}:in:businessKey`,
+    CAMUNDA_EXECUTION_LISTENER = `${__namespace}:executionListener`,
+    CAMUNDA_FIELD = `${__namespace}:field`;
 
 var VALID_BINDING_TYPES = [
   PROPERTY_TYPE,

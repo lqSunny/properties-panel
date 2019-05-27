@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var is = require('bpmn-js/lib/util/ModelUtil').is,
     getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject;
 
@@ -14,8 +15,8 @@ function getListeners(bo, type) {
   return bo && extensionElementsHelper.getExtensionElements(bo, type) || [];
 }
 
-var CAMUNDA_EXECUTION_LISTENER_ELEMENT = 'camunda:ExecutionListener';
-var CAMUNDA_TASK_LISTENER_ELEMENT = 'camunda:TaskListener';
+var CAMUNDA_EXECUTION_LISTENER_ELEMENT = `${__namespace}:ExecutionListener`;
+var CAMUNDA_TASK_LISTENER_ELEMENT = `${__namespace}:TaskListener`;
 
 module.exports = function(element, bpmnFactory, options, translate) {
 

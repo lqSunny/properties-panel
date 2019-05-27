@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var entryFactory = require('../../../../factory/EntryFactory'),
     cmdHelper = require('../../../../helper/CmdHelper');
 
@@ -19,14 +20,14 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
     get: function(element, node) {
       var bo = getBusinessObject(element);
-      return { externalTopic: bo.get('camunda:topic') };
+      return { externalTopic: bo.get(`${__namespace}:topic`) };
     },
 
     set: function(element, values, node) {
       var bo = getBusinessObject(element);
-      return cmdHelper.updateBusinessObject(element, bo, {
-        'camunda:topic': values.externalTopic
-      });
+      var obj = {};
+      obj[`${__namespace}:topic`] = values.externalTopic;
+      return cmdHelper.updateBusinessObject(element, bo, obj);
     },
 
     validate: function(element, values, node) {

@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../index')
 var getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject,
     getExtensionElements = require('./ExtensionElementsHelper').getExtensionElements;
 
@@ -17,7 +18,7 @@ module.exports = FormHelper;
 FormHelper.getFormData = function(element) {
   var bo = getBusinessObject(element);
 
-  var formData = getExtensionElements(bo, 'camunda:FormData');
+  var formData = getExtensionElements(bo, `${__namespace}:FormData`);
 
   if (typeof formData !== 'undefined') {
     return formData[0];

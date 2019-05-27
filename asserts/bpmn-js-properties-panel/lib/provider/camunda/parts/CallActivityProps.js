@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../index')
 var getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject,
     is = require('bpmn-js/lib/util/ModelUtil').is;
 
@@ -16,7 +17,7 @@ function getCallableType(element) {
   var bo = getBusinessObject(element);
 
   var boCalledElement = bo.get('calledElement'),
-      boCaseRef = bo.get('camunda:caseRef');
+      boCaseRef = bo.get(`${__namespace}:caseRef`);
 
   var callActivityType = '';
   if (typeof boCalledElement !== 'undefined') {
@@ -31,21 +32,21 @@ function getCallableType(element) {
 }
 
 var DEFAULT_PROPS = {
-  calledElement: undefined,
-  'camunda:calledElementBinding': 'latest',
-  'camunda:calledElementVersion': undefined,
-  'camunda:calledElementTenantId': undefined,
-  'camunda:variableMappingClass' : undefined,
-  'camunda:variableMappingDelegateExpression' : undefined,
-  'camunda:caseRef': undefined,
-  'camunda:caseBinding': 'latest',
-  'camunda:caseVersion': undefined,
-  'camunda:caseTenantId': undefined
+  calledElement: undefined
 };
+DEFAULT_PROPS[`${__namespace}:calledElementBinding`] = 'latest';
+DEFAULT_PROPS[`${__namespace}:calledElementVersion`] = undefined;
+DEFAULT_PROPS[`${__namespace}:calledElementTenantId`] = undefined;
+DEFAULT_PROPS[`${__namespace}:variableMappingClass`] = undefined;
+DEFAULT_PROPS[`${__namespace}:variableMappingDelegateExpression`] = undefined;
+DEFAULT_PROPS[`${__namespace}:caseRef`] = undefined;
+DEFAULT_PROPS[`${__namespace}:caseBinding`] = 'latest';
+DEFAULT_PROPS[`${__namespace}:caseVersion`] = undefined;
+DEFAULT_PROPS[`${__namespace}:caseTenantId`] = undefined;
 
 module.exports = function(group, element, bpmnFactory, translate) {
 
-  if (!is(element, 'camunda:CallActivity')) {
+  if (!is(element, `${__namespace}:CallActivity`)) {
     return;
   }
 
@@ -74,7 +75,7 @@ module.exports = function(group, element, bpmnFactory, translate) {
         props.calledElement = '';
       }
       else if (type === 'cmmn') {
-        props['camunda:caseRef'] = '';
+        props[`${__namespace}:caseRef`] = '';
       }
 
       return cmdHelper.updateProperties(element, props);

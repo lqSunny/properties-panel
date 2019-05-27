@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../index')
 var is = require('bpmn-js/lib/util/ModelUtil').is,
     getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject;
 
@@ -9,7 +10,7 @@ var jobPriority = require('./implementation/JobPriority'),
 module.exports = function(group, element, bpmnFactory, translate) {
   var businessObject = getBusinessObject(element);
 
-  if (is(element, 'camunda:JobPriorized') ||
+  if (is(element, `${__namespace}:JobPriorized`) ||
       is(element, 'bpmn:Participant') && businessObject.get('processRef')) {
 
     group.entries = group.entries.concat(jobPriority(element, bpmnFactory, {
@@ -25,7 +26,7 @@ module.exports = function(group, element, bpmnFactory, translate) {
     }, translate));
   }
 
-  if (is(element, 'camunda:AsyncCapable')) {
+  if (is(element, `${__namespace}:AsyncCapable`)) {
     group.entries = group.entries.concat(jobRetryTimeCycle(element, bpmnFactory, {
       getBusinessObject: getBusinessObject
     }, translate));

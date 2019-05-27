@@ -1,11 +1,12 @@
 'use strict';
 
+var { __namespace } = require('../../../index')
 var is = require('bpmn-js/lib/util/ModelUtil').is,
     entryFactory = require('../../../factory/EntryFactory');
 
 
 module.exports = function(group, element, translate) {
-  if (is(element, 'camunda:Assignable')) {
+  if (is(element, `${__namespace}:Assignable`)) {
 
     // Assignee
     group.entries.push(entryFactory.textField({

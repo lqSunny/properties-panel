@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var entryFactory = require('../../../../factory/EntryFactory');
 
 var cmdHelper = require('../../../../helper/CmdHelper');
@@ -16,15 +17,15 @@ module.exports = function(element, bpmnFactory, options, translate) {
     get: function(element, node) {
       var bo = getBusinessObject(element);
       return {
-        taskPriority: bo.get('camunda:taskPriority')
+        taskPriority: bo.get(`${__namespace}:taskPriority`)
       };
     },
 
     set: function(element, values) {
       var bo = getBusinessObject(element);
-      return cmdHelper.updateBusinessObject(element, bo, {
-        'camunda:taskPriority': values.taskPriority || undefined
-      });
+      var obj = {};
+      obj[`${__namespace}:taskPriority`] = values.taskPriority || undefined;
+      return cmdHelper.updateBusinessObject(element, bo, obj);
     }
 
   });

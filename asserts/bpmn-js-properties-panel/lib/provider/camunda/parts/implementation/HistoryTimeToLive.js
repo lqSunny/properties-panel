@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var entryFactory = require('../../../../factory/EntryFactory');
 
 var cmdHelper = require('../../../../helper/CmdHelper');
@@ -15,7 +16,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
     get: function(element, node) {
       var bo = getBusinessObject(element);
-      var historyTimeToLive = bo.get('camunda:historyTimeToLive');
+      var historyTimeToLive = bo.get(`${__namespace}:historyTimeToLive`);
 
       return {
         historyTimeToLive: historyTimeToLive ? historyTimeToLive : ''
@@ -24,9 +25,9 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
     set: function(element, values) {
       var bo = getBusinessObject(element);
-      return cmdHelper.updateBusinessObject(element, bo, {
-        'camunda:historyTimeToLive': values.historyTimeToLive || undefined
-      });
+      var obj = {};
+      obj[`${__namespace}:historyTimeToLive`] = values.historyTimeToLive || undefined;
+      return cmdHelper.updateBusinessObject(element, bo, obj);
     }
 
   });

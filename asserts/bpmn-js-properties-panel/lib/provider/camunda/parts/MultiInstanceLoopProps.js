@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../index')
 var getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject,
     is = require('bpmn-js/lib/util/ModelUtil').is;
 
@@ -17,7 +18,7 @@ function getLoopCharacteristics(element) {
 
 function ensureMultiInstanceSupported(element) {
   var loopCharacteristics = getLoopCharacteristics(element);
-  return !!loopCharacteristics && is(loopCharacteristics, 'camunda:Collectable');
+  return !!loopCharacteristics && is(loopCharacteristics, `${__namespace}:Collectable`);
 }
 
 module.exports = function(group, element, bpmnFactory, translate) {

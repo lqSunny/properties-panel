@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../index')
 var entryFactory = require('../../../../factory/EntryFactory'),
     cmdHelper = require('../../../../helper/CmdHelper');
 
@@ -10,7 +11,7 @@ module.exports = function(group, element, bpmnFactory, conditionalEventDefinitio
 
   var getValue = function(modelProperty) {
     return function(element) {
-      var modelPropertyValue = conditionalEventDefinition.get('camunda:' + modelProperty);
+      var modelPropertyValue = conditionalEventDefinition.get(`${__namespace}:` + modelProperty);
       var value = {};
 
       value[modelProperty] = modelPropertyValue;
@@ -22,7 +23,7 @@ module.exports = function(group, element, bpmnFactory, conditionalEventDefinitio
     return function(element, values) {
       var props = {};
 
-      props['camunda:' + modelProperty] = values[modelProperty] || undefined;
+      props[`${__namespace}:` + modelProperty] = values[modelProperty] || undefined;
 
       return cmdHelper.updateBusinessObject(element, conditionalEventDefinition, props);
     };

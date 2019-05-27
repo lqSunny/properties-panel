@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var entryFactory = require('../../../../factory/EntryFactory'),
     cmdHelper = require('../../../../helper/CmdHelper');
 
@@ -10,9 +11,9 @@ var DELEGATE_TYPES = [
 ];
 
 var PROPERTIES = {
-  class: 'camunda:class',
-  expression: 'camunda:expression',
-  delegateExpression: 'camunda:delegateExpression'
+  class: `${__namespace}:class`,
+  expression: `${__namespace}:expression`,
+  delegateExpression: `${__namespace}:delegateExpression`
 };
 
 function isDelegate(type) {

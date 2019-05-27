@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject,
     is = require('bpmn-js/lib/util/ModelUtil').is;
 
@@ -58,7 +59,7 @@ function getPropertiesElement(element) {
  */
 function getPropertiesElementInsideExtensionElements(extensionElements) {
   return find(extensionElements.values, function(elem) {
-    return is(elem, 'camunda:Properties');
+    return is(elem, `${__namespace}:Properties`);
   });
 }
 
@@ -120,7 +121,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
 
       var properties = getPropertiesElement(parent);
       if (!properties) {
-        properties = elementHelper.createElement('camunda:Properties', {}, parent, bpmnFactory);
+        properties = elementHelper.createElement(`${__namespace}:Properties`, {}, parent, bpmnFactory);
 
         if (!isExtensionElements(parent)) {
           commands.push(cmdHelper.updateBusinessObject(element, parent, { 'properties': properties }));
@@ -146,7 +147,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
         propertyProps.id = generatePropertyId();
       }
 
-      var property = elementHelper.createElement('camunda:Property', propertyProps, properties, bpmnFactory);
+      var property = elementHelper.createElement(`${__namespace}:Property`, propertyProps, properties, bpmnFactory);
       commands.push(cmdHelper.addElementsTolist(element, properties, 'values', [ property ]));
 
       return commands;
@@ -194,7 +195,7 @@ module.exports = function(element, bpmnFactory, options, translate) {
           commands.push(cmdHelper.updateBusinessObject(element, parent, { properties: undefined }));
         } else {
           forEach(parent.values, function(value) {
-            if (is(value, 'camunda:Properties')) {
+            if (is(value, `${__namespace}:Properties`)) {
               commands.push(extensionElementsHelper.removeEntry(bo, element, value));
             }
           });

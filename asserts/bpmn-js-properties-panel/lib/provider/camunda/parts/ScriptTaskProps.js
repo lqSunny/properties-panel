@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../index')
 var getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject,
     is = require('bpmn-js/lib/util/ModelUtil').is,
     entryFactory = require('../../../factory/EntryFactory'),
@@ -50,17 +51,17 @@ module.exports = function(group, element, bpmnFactory, translate) {
     modelProperty : 'scriptResultVariable',
 
     get: function(element, propertyName) {
-      var boResultVariable = bo.get('camunda:resultVariable');
+      var boResultVariable = bo.get(`${__namespace}:resultVariable`);
 
       return { scriptResultVariable : boResultVariable };
     },
 
     set: function(element, values, containerElement) {
-      return cmdHelper.updateProperties(element, {
-        'camunda:resultVariable': values.scriptResultVariable.length
+      var obj = {};
+      obj[`${__namespace}:resultVariable`] = values.scriptResultVariable.length
           ? values.scriptResultVariable
           : undefined
-      });
+      return cmdHelper.updateProperties(element, obj);
     }
 
   }));

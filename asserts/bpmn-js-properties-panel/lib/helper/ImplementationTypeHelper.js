@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../index')
 var ModelUtil = require('bpmn-js/lib/util/ModelUtil'),
     is = ModelUtil.is,
     getBusinessObject = ModelUtil.getBusinessObject;
@@ -19,7 +20,7 @@ module.exports = ImplementationTypeHelper;
  * @return {boolean} a boolean value
  */
 ImplementationTypeHelper.isServiceTaskLike = function(element) {
-  return is(element, 'camunda:ServiceTaskLike');
+  return is(element, `${__namespace}:ServiceTaskLike`);
 };
 
 /**
@@ -30,7 +31,7 @@ ImplementationTypeHelper.isServiceTaskLike = function(element) {
  * @return {boolean} a boolean value
  */
 ImplementationTypeHelper.isDmnCapable = function(element) {
-  return is(element, 'camunda:DmnCapable');
+  return is(element, `${__namespace}:DmnCapable`);
 };
 
 /**
@@ -41,7 +42,7 @@ ImplementationTypeHelper.isDmnCapable = function(element) {
  * @return {boolean} a boolean value
  */
 ImplementationTypeHelper.isExternalCapable = function(element) {
-  return is(element, 'camunda:ExternalCapable');
+  return is(element, `${__namespace}:ExternalCapable`);
 };
 
 /**
@@ -52,7 +53,7 @@ ImplementationTypeHelper.isExternalCapable = function(element) {
  * @return {boolean} a boolean value
  */
 ImplementationTypeHelper.isTaskListener = function(element) {
-  return is(element, 'camunda:TaskListener');
+  return is(element, `${__namespace}:TaskListener`);
 };
 
 /**
@@ -63,7 +64,7 @@ ImplementationTypeHelper.isTaskListener = function(element) {
  * @return {boolean} a boolean value
  */
 ImplementationTypeHelper.isExecutionListener = function(element) {
-  return is(element, 'camunda:ExecutionListener');
+  return is(element, `${__namespace}:ExecutionListener`);
 };
 
 /**
@@ -147,37 +148,37 @@ ImplementationTypeHelper.getImplementationType = function(element) {
   }
 
   if (this.isDmnCapable(bo)) {
-    var decisionRef = bo.get('camunda:decisionRef');
+    var decisionRef = bo.get(`${__namespace}:decisionRef`);
     if (typeof decisionRef !== 'undefined') {
       return 'dmn';
     }
   }
 
   if (this.isServiceTaskLike(bo)) {
-    var connectors = extensionsElementHelper.getExtensionElements(bo, 'camunda:Connector');
+    var connectors = extensionsElementHelper.getExtensionElements(bo, `${__namespace}:Connector`);
     if (typeof connectors !== 'undefined') {
       return 'connector';
     }
   }
 
   if (this.isExternalCapable(bo)) {
-    var type = bo.get('camunda:type');
+    var type = bo.get(`${__namespace}:type`);
     if (type === 'external') {
       return 'external';
     }
   }
 
-  var cls = bo.get('camunda:class');
+  var cls = bo.get(`${__namespace}:class`);
   if (typeof cls !== 'undefined') {
     return 'class';
   }
 
-  var expression = bo.get('camunda:expression');
+  var expression = bo.get(`${__namespace}:expression`);
   if (typeof expression !== 'undefined') {
     return 'expression';
   }
 
-  var delegateExpression = bo.get('camunda:delegateExpression');
+  var delegateExpression = bo.get(`${__namespace}:delegateExpression`);
   if (typeof delegateExpression !== 'undefined') {
     return 'delegateExpression';
   }

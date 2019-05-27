@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../../../../index')
 var getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject;
 
 var entryFactory = require('../../../../factory/EntryFactory');
@@ -100,7 +101,7 @@ function getCompletionConditionValue(element) {
  * @return {string} the 'camunda:collection' value
  */
 function getCollection(element) {
-  return getProperty(element, 'camunda:collection');
+  return getProperty(element, `${__namespace}:collection`);
 }
 
 /**
@@ -111,7 +112,7 @@ function getCollection(element) {
  * @return {string} the 'camunda:elementVariable' value
  */
 function getElementVariable(element) {
-  return getProperty(element, 'camunda:elementVariable');
+  return getProperty(element, `${__namespace}:elementVariable`);
 }
 
 
@@ -227,9 +228,9 @@ module.exports = function(element, bpmnFactory, translate) {
 
     set: function(element, values) {
       var loopCharacteristics = getLoopCharacteristics(element);
-      return cmdHelper.updateBusinessObject(element, loopCharacteristics, {
-        'camunda:collection': values.collection || undefined
-      });
+      var obj = {};
+      obj[`${__namespace}:collection`] = values.collection || undefined;
+      return cmdHelper.updateBusinessObject(element, loopCharacteristics, obj);
     },
 
     validate: function(element, values, node) {
@@ -258,9 +259,9 @@ module.exports = function(element, bpmnFactory, translate) {
 
     set: function(element, values) {
       var loopCharacteristics = getLoopCharacteristics(element);
-      return cmdHelper.updateBusinessObject(element, loopCharacteristics, {
-        'camunda:elementVariable': values.elementVariable || undefined
-      });
+      var obj = {};
+      obj[`${__namespace}:elementVariable`] = values.elementVariable || undefined;
+      return cmdHelper.updateBusinessObject(element, loopCharacteristics, obj);
     }
   }));
 

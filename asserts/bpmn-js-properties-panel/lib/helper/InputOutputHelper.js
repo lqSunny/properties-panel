@@ -1,5 +1,6 @@
 'use strict';
 
+var { __namespace } = require('../index')
 var ModelUtil = require('bpmn-js/lib/util/ModelUtil'),
     is = ModelUtil.is,
     getBusinessObject = ModelUtil.getBusinessObject;
@@ -32,7 +33,7 @@ function getParameters(element, prop, insideConnector) {
 InputOutputHelper.getInputOutput = function(element, insideConnector) {
   if (!insideConnector) {
     var bo = getBusinessObject(element);
-    return (getElements(bo, 'camunda:InputOutput') || [])[0];
+    return (getElements(bo, `${__namespace}:InputOutput`) || [])[0];
   }
   var connector = this.getConnector(element);
   return connector && connector.get('inputOutput');
@@ -47,7 +48,7 @@ InputOutputHelper.getInputOutput = function(element, insideConnector) {
  */
 InputOutputHelper.getConnector = function(element) {
   var bo = implementationTypeHelper.getServiceTaskLikeBusinessObject(element);
-  return bo && (getElements(bo, 'camunda:Connector') || [])[0];
+  return bo && (getElements(bo, `${__namespace}:Connector`) || [])[0];
 };
 
 /**
